@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  django:
+    container_name: django
+    build:
+      context: .  # Set the context to the current directory
+      dockerfile: Dockerfile  # Explicitly specify the location of the Dockerfile if needed
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./:/usr/src/app/  # Mount the core directory to the container
+    ports:
+      - 8001:8000  # Map port 8000 inside the container to port 8001 on the host
+    environment:
+      - DEBUG=1
+      - SECRET_KEY=your_secret_key
+      - ALLOWED_HOSTS=localhost,127.0.0.1
