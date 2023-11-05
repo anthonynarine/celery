@@ -23,11 +23,11 @@ services:
       - redis
 
   celery:
-    container_name: celery
+    container_name: celery1
     build:
       context: .  # Set the context to the current directory
       dockerfile: Dockerfile  # Explicitly specify the location of the Dockerfile if needed
-    command: celery --app=core worker -l INFO
+    command: celery --app=core worker -l INFO -Q queue1
     volumes:
       - ./:/usr/src/app/  # Mount the core directory to the container
     environment:
@@ -43,7 +43,7 @@ services:
     build:
       context: ./celeryWorker  # Set the context to the current directory
       dockerfile: Dockerfile  
-    command: celery --app=celerytask worker -l INFO
+    command: celery --app=celerytask worker -l INFO -Q queue2
     volumes:
       - ./celeryworker:/usr/src/app/  # Mount the core directory to the container
     depends_on:
