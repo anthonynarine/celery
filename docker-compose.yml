@@ -37,3 +37,17 @@ services:
       - CELERY_BROKER_URL=redis://redis:6379/0  
     depends_on:
       - redis
+
+  celery2:
+    container_name: celery2
+    build:
+      context: ./celeryWorker  # Set the context to the current directory
+      dockerfile: Dockerfile  
+    command: celery --app=celerytask worker -l INFO
+    volumes:
+      - ./celeryworker:/usr/src/app/  # Mount the core directory to the container
+    depends_on:
+      - redis
+      - django
+
+      
