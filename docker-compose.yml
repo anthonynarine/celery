@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.10"  # Updated version
 
 services:
 
@@ -17,7 +17,23 @@ services:
       - 8001:8000  # Map port 8000 inside the container to port 8001 on the host
     environment:
       - DEBUG=1
-      - SECRET_KEY=your_secret_key
-      - ALLOWED_HOSTS=localhost,127.0.0.1
+      - SECRET_KEY=9af98s4f4a94f9a4adsf4
+      - ALLOWED_HOSTS=localhost,127.0.0.1,django  
+    depends_on:
+      - redis
+
+  celery:
+    container_name: celery
+    build:
+      context: .  # Set the context to the current directory
+      dockerfile: Dockerfile  # Explicitly specify the location of the Dockerfile if needed
+    command: celery --app=core worker -l INFO
+    volumes:
+      - ./:/usr/src/app/  # Mount the core directory to the container
+    environment:
+      - DEBUG=1
+      - SECRET_KEY=9af98s4f4a94f9a4adsf4
+      - ALLOWED_HOSTS=localhost,127.0.0.1,django  
+      - CELERY_BROKER_URL=redis://redis:6379/0  
     depends_on:
       - redis
