@@ -1,4 +1,4 @@
-# Corrected Celery configuration with the correct spelling of "redis" as the backend
+
 import os
 import time
 from celery import Celery 
@@ -13,6 +13,7 @@ app.config_from_object("django.conf:settings", namespace="CELERY")
 app.conf.task_queues = [
     Queue('tasks', Exchange('tasks'), routing_key='tasks',
           queue_arguments={'x-max-priority': 10}),
+    # Queue('dead_letter', routing_key='dead_letter'),
 ]
 
 app.conf.task_acks_late = True
@@ -23,6 +24,7 @@ app.conf.worker_concurrency = 1
 base_dir = os.getcwd()
 task_folder = os.path.join(base_dir, "core", "celery_tasks" )
 
+#dynamically discover + register Celery tasks form specific Python  modules within a dir
 if os.path.exists(task_folder) and os.path.isdir(task_folder):
     task_modules = []
     for filename in os.listdir(task_folder):

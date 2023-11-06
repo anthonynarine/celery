@@ -21,7 +21,7 @@ services:
   django:
     container_name: django
     build:
-      context: .  # Set the context to the current directory
+      context: .  # Set the context to the current directory (in current dir for this project)
       dockerfile: Dockerfile  # Explicitly specify the location of the Dockerfile if needed
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
@@ -35,12 +35,12 @@ services:
     depends_on:
       - redis
 
-  celery1:
+  celery:
     container_name: celery1
     build:
       context: .  # Set the context to the current directory
       dockerfile: Dockerfile  # Explicitly specify the location of the Dockerfile if needed
-    command: celery --app=core worker --hostname=celeryWorker1@%h -l INFO -Q tasks
+    command: celery --app=core worker -l INFO -Q tasks -B
     volumes:
       - ./:/usr/src/app/  # Mount the core directory to the container
     environment:
